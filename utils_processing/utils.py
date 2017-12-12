@@ -100,3 +100,12 @@ def compute_inter_quartile_distance_window(windows):
         q75, q25 = np.percentile(windows[i], [75 ,25])
         iqr_windows.append(q75 - q25)
     return iqr_windows
+    
+    
+def compute_norm_window(windows):
+	norm_windows = []
+	for i in range(len(windows)):
+		if len(windows[i]) <= 1:
+			continue
+		norm_windows.append(sum(windows[i]))
+	return norm_windows
