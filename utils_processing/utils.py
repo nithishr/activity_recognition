@@ -3,7 +3,66 @@ import pandas as pd
 import numpy as np
 from sklearn.preprocessing import normalize
 from scipy.stats import skew, kurtosis
+from itertools import combinations
+import matplotlib.pyplot as plt
 
+
+walking_files = ['Activity-Data/Samsung/Walk/Walk_N2/Walk_N2Pressure_clean.csv', 'Activity-Data/Samsung/Walk/Walk_N_3/Walk_N_3Pressure_clean.csv', 
+                 'Activity-Data/Samsung/Walk/Walk_N/Walk_NPressure_clean.csv', 'Activity-Data/Samsung/Walk/Walk_P1/Walk_P1Pressure_clean.csv',
+                 'Activity-Data/Samsung/Walk/Walk_P2/Walk_P2Pressure_clean.csv', 'Activity-Data/Walking/01/Walking01Pressure_clean.csv', 
+                 'Activity-Data/Walking/2/Walking2Pressure_clean.csv', 'Activity-Data/Walking/3/Walking3Pressure_clean.csv', 
+                 'Activity-Data/Walking/04/Walking04Pressure_clean.csv','Activity-Data/Walking/5/Walking5Pressure_clean.csv',
+                 'Activity-Data/1912/Walk/1/Walk_1Pressure_clean.csv', 'Activity-Data/1912/Walk/2/Walk_8Pressure_clean.csv',
+                 'Activity-Data/2012/Walk/1/Walk_1Pressure_clean.csv', 'Activity-Data/2012/Walk/2/Walk_2Pressure_clean.csv',
+                 'Activity-Data/2012/Walk/3/Walk_3Pressure_clean.csv', 'Activity-Data/2012/Walk/4/Walk_4Pressure_clean.csv',
+                 'Activity-Data/2012/Walk/5/Walk_5Pressure_clean.csv', 'Activity-Data/2012/Walk/6/Walk_6Pressure_clean.csv',
+                 'Activity-Data/2012/Walk/7/Walk7Pressure_clean.csv', 'Activity-Data/2012/Walk/8/Walk_8Pressure_clean.csv']
+                 
+climbing_files = ['Activity-Data/Samsung/Climbing_Up/Climb_Up_1/Climb_Up_1Pressure_clean.csv', 'Activity-Data/Samsung/Climbing_Up/Climb_Up_2/Climb_Up_2Pressure_clean.csv',    
+                 'Activity-Data/Samsung/Climbing_Up/Climb_Up_3/Climb_Up_3Pressure_clean.csv', 'Activity-Data/Samsung/Climbing_Up/Climb_Up_4/Climb_Up_4Pressure_clean.csv',    
+                 'Activity-Data/Samsung/Climbing_Up/Climb_Up_4/Climb_Up_4Pressure_clean.csv', 'Activity-Data/Samsung/Climbing_Up/Climb_Up_6/Climb_Up_6Pressure_clean.csv',
+                 'Activity-Data/Samsung/Climbing_Up/Climb_Up_7/Climb_Up_7Pressure_clean.csv', 'Activity-Data/Samsung/Climbing_Up/Climb_Up_8/Climb_Up_8Pressure_clean.csv',
+                 'Activity-Data/Climbing_Stairs/1/Climbing_Stairs1Pressure_clean.csv', 'Activity-Data/Climbing_Stairs/2/Climbing_Stairs2Pressure_clean.csv', 
+                 'Activity-Data/Climbing_Stairs/3/Climbing_Stairs3Pressure_clean.csv', 'Activity-Data/Climbing_Stairs/5/Climbing_Stairs5Pressure_clean.csv',
+                 'Activity-Data/Climbing_Stairs/6/Climbing_Stairs6Pressure_clean.csv', 'Activity-Data/Climbing_Stairs/7/Climbing_Stairs7Pressure_clean.csv',
+                 'Activity-Data/1912/Stairs_Up/1/Stairs_up_1Pressure_clean.csv', 'Activity-Data/1912/Stairs_Up/2/Stairs_up_2Pressure_clean.csv',
+                 'Activity-Data/1912/Stairs_Up/3/Stairs_up_3Pressure_clean.csv', 'Activity-Data/1912/Stairs_Up/4/Stairs_up_4Pressure_clean.csv',
+                 'Activity-Data/1912/Stairs_Up/5/Stairs_up_5Pressure_clean.csv', 'Activity-Data/2012/Stairs_Up/1/Stairs_up_1Pressure_clean.csv', 
+                 'Activity-Data/2012/Stairs_Up/2/Stairs_up_2Pressure_clean.csv', 'Activity-Data/2012/Stairs_Up/3/Stairs_up_3Pressure_clean.csv', 
+                 'Activity-Data/2012/Stairs_Up/4/Stairs_up_4Pressure_clean.csv', 'Activity-Data/2012/Stairs_Up/5/Stairs_up_5Pressure_clean.csv']
+                 
+ 
+downstairs_files = ['Activity-Data/Samsung/Climbing_Down/Climb_Down_1/Climb_Down_1Pressure_clean.csv', 'Activity-Data/Samsung/Climbing_Down/Climb_Down_2/Climb_Down_2Pressure_clean.csv',    
+                    'Activity-Data/Samsung/Climbing_Down/Climb_Down_3/Climb_Down_3Pressure_clean.csv', 'Activity-Data/Samsung/Climbing_Down/Climb_Down_6/Climb_Down_6Pressure_clean.csv',
+                    'Activity-Data/Samsung/Climbing_Down/Climb_Down_8/Climb_Down_8Pressure_clean.csv', 'Activity-Data/Samsung/Climbing_Down/Climb_Down_9/Climb_Down_9Pressure_clean.csv',
+                    'Activity-Data/Downstairs/1/Downstairs1Pressure_clean.csv', 'Activity-Data/Downstairs/2/Downstairs2Pressure_clean.csv', 
+                    'Activity-Data/Downstairs/3/Downstairs3Pressure_clean.csv', 'Activity-Data/Downstairs/4/Downstairs4Pressure_clean.csv',
+                    'Activity-Data/Downstairs/5/Downstairs5Pressure_clean.csv', 'Activity-Data/Downstairs/6/Downstairs6Pressure_clean.csv',
+                    'Activity-Data/1912/Stairs_Down/1/Stairs_down_1Pressure_clean.csv', 'Activity-Data/1912/Stairs_Down/2/Stairs_down_2Pressure_clean.csv',
+                    'Activity-Data/1912/Stairs_Down/3/Stairs_down_3Pressure_clean.csv', 'Activity-Data/1912/Stairs_Down/4/Stairs_down_4Pressure_clean.csv',
+                    'Activity-Data/1912/Stairs_Down/5/Stairs_down_5Pressure_clean.csv', 'Activity-Data/2012/Stairs_Down/1/Stairs_down_1Pressure_clean.csv', 
+                    'Activity-Data/2012/Stairs_Down/2/Stairs_down_2Pressure_clean.csv', 'Activity-Data/2012/Stairs_Down/3/Stairs_down_3Pressure_clean.csv', 
+                    'Activity-Data/2012/Stairs_Down/4/Stairs_down_4Pressure_clean.csv', 'Activity-Data/2012/Stairs_Down/5/Stairs_down_5Pressure_clean.csv'
+                   ]
+
+escalator_up_files = ['Activity-Data/1912/Esc_Up/1/Esc_up_1Pressure_clean.csv', 'Activity-Data/1912/Esc_Up/2/Esc_up_2Pressure_clean.csv',
+                      'Activity-Data/1912/Esc_Up/3/Esc_up_3Pressure_clean.csv', 'Activity-Data/1912/Esc_Up/4/Esc_Up_4Pressure_clean.csv',
+                      'Activity-Data/Samsung/061217/Esc_Up/Esc_Up_1/Esc_Up_1Pressure_clean.csv', 'Activity-Data/Samsung/061217/Esc_Up/Esc_Up_2/Esc_Up_2Pressure_clean.csv',
+                      'Activity-Data/Samsung/061217/Esc_Up/3/Esc_Up_3Pressure_clean.csv', 'Activity-Data/Samsung/061217/Esc_Up/4/Esc_up_4Pressure_clean.csv',
+                      'Activity-Data/Samsung/061217/Esc_Up/5/Esc_up_5Pressure_clean.csv', 'Activity-Data/2012/Esc_Up/1/Esc_up_1Pressure_clean.csv']
+                      
+escalator_down_files = ['Activity-Data/Samsung/061217/Esc_down/Esc_down_1/Esc_down_1Pressure_clean.csv', 'Activity-Data/Samsung/061217/Esc_down/Esc_down_2/Esc_down_2Pressure_clean.csv',
+                        'Activity-Data/Samsung/061217/Esc_down/3/Esc_d2Pressure_clean.csv']
+                        
+lift_up_files = ['Activity-Data/1912/Lift_Up/1/Lift_up_1Pressure_clean.csv', 'Activity-Data/1912/Lift_Up/2/Lift_up_4Pressure_clean.csv',
+                 'Activity-Data/1912/Lift_Up/3/Lift_up_9Pressure_clean.csv', 'Activity-Data/Samsung/061217/Lift_Up/1/Lift_Up_2Pressure_clean.csv',
+                 'Activity-Data/Samsung/061217/Lift_Up/2/Lift_up_5Pressure_clean.csv']
+
+lift_down_files = ['Activity-Data/1912/Lift_Down/1/Lift_down_9Pressure_clean.csv', 'Activity-Data/Samsung/061217/Lift_Down/1/Lift_Down_2Pressure_clean.csv', 
+                   'Activity-Data/Samsung/061217/Lift_Down/2/Lift_down_3Pressure_clean.csv','Activity-Data/Samsung/061217/Lift_Down/3/Lift_down_Pressure_clean.csv']
+                 											 
+                   
+                   
 def read_concatenate_files(filelist, usecols):
     frame_list = []
     for component_file in filelist:
@@ -109,3 +168,149 @@ def compute_norm_window(windows):
 			continue
 		norm_windows.append(sum(windows[i]))
 	return norm_windows
+	
+def create_window(dataframe, ts_start, window_length):
+    """Return the rows in the dataframe within the timestamp range [ts_start, ts_start + window_length]"""
+    return dataframe[(dataframe['timestamp'] >= ts_start) & (dataframe['timestamp'] <= ts_start + window_length)]
+    
+
+def create_sliding_windows(dataframe, sliding_window_interval, window_length):
+    """Create sliding windows for a single dataframe"""
+    ts_min = min(dataframe['timestamp'])
+    ts_max = max(dataframe['timestamp'])
+    ts_iter = ts_min
+    windows = []
+    while ts_iter <= ts_max:
+        window = create_window(dataframe, ts_iter, window_length)
+        windows.append(window)
+        ts_iter += sliding_window_interval
+    return windows        
+    
+    
+def create_pressure_features_windows(windows_frames, percentile=50):
+    windows_features_list = []
+    for window in windows_frames:
+        if len(window) <= 1:
+            continue
+        else:
+            skew_windows = skew(window['pressure'])
+
+            window_norm = normalize(np.array(window['pressure']).reshape(1,-1))
+            percentile = np.percentile(window_norm, percentile)
+
+            q75, q25 = np.percentile(window['pressure'], [75 ,25])
+            iqr = q75 - q25
+
+            kurtosis_w = kurtosis(window['pressure'])
+
+            std_deviation = np.std(window['pressure'])
+
+            #derivative = compute_sum_derivative_window(window['pressure'], window['timestamp'])
+            derivative_window = np.gradient(window['pressure'], window['timestamp'])
+            derivative = sum(derivative_window)
+            
+            median = np.median(window['pressure'].values)
+            window['pressure_norm'] = window['pressure'].apply(lambda x: x-median)    
+            norm = sum(window['pressure_norm'])
+#             print(skew_windows, percentile, iqr, kurtosis_w, std_deviation, derivative)
+            window_features = pd.DataFrame()
+            window_features['skew'] = [skew_windows]
+            window_features['percentile'] = [percentile]
+            window_features['iqr'] = [iqr]
+            window_features['kurtosis'] = [kurtosis_w]
+            window_features['std_deviation'] = [std_deviation]
+            window_features['derivative'] = [derivative]
+#             print(window_features)
+            window_features['norm'] = [norm]
+            windows_features_list.append(window_features)
+#     print(len(windows_features_list))
+    df_features = pd.concat(windows_features_list)
+    return df_features
+    
+def create_data_frame(input_files, sliding_window_interval, window_length, header=0, usecols=[0,1,2]):
+    frame_list = []
+    for i_file in input_files:
+        df = pd.read_csv(i_file, delimiter=',', header = header, skipinitialspace = True, usecols = usecols)
+        df_windows = create_sliding_windows(df, sliding_window_interval, window_length)
+        df_features = create_pressure_features_windows(df_windows)
+#     print(len(df), len(df_features))
+        frame_list.append(df_features)
+    out_frame = pd.DataFrame()
+    out_frame = pd.concat(frame_list)
+    out_frame = out_frame.reset_index(drop=True)
+    return out_frame
+
+
+def create_features_from_files(sliding_window_interval, window_interval, w_files = walking_files, 
+                               su_files = climbing_files, sd_files = downstairs_files,
+                               eu_files = escalator_up_files, ed_files = escalator_down_files,
+                               lu_files = lift_up_files, ld_files = lift_down_files):
+    w_frame = create_data_frame(walking_files, sliding_window_interval, window_interval)
+    w_frame['label'] = 0
+    su_frame = create_data_frame(su_files, sliding_window_interval, window_interval)
+    su_frame['label'] = 1
+    sd_frame = create_data_frame(sd_files, sliding_window_interval, window_interval)
+    sd_frame['label'] = 2
+    eu_frame = create_data_frame(eu_files, sliding_window_interval, window_interval)
+    eu_frame['label'] = 3
+    ed_frame = create_data_frame(ed_files, sliding_window_interval, window_interval)
+    ed_frame['label'] = 4
+    lu_frame = create_data_frame(lu_files, sliding_window_interval, window_interval)
+    lu_frame['label'] = 5
+    ld_frame = create_data_frame(ld_files, sliding_window_interval, window_interval)
+    ld_frame['label'] = 6
+    return w_frame, su_frame, sd_frame, eu_frame, ed_frame, lu_frame, ld_frame
+    
+    
+def print_characteristics(w_frame, su_frame, sd_frame, eu_frame, ed_frame, lu_frame, ld_frame):
+    print("Walking Frame")
+    display(w_frame.head(), w_frame.tail())
+    print("Stairs Up Frame")
+    display(su_frame.head(), su_frame.tail())
+    print("Stairs Down Frame")
+    display(sd_frame.head(), sd_frame.tail())
+    print("Escalator Up Frame")
+    display(eu_frame.head(), eu_frame.tail())
+    print("Escalator Down Frame")
+    display(ed_frame.head(), ed_frame.tail())
+    print("Lift Up Frame")
+    display(lu_frame.head(), lu_frame.tail())
+    print("Lift Down Frame")
+    display(ld_frame.head(), ld_frame.tail())
+    
+    
+
+def create_dataset_vertical_transition(w_frame, su_frame, sd_frame, eu_frame, ed_frame, lu_frame, ld_frame):
+    w_frame['label_vertical'] = 0
+    v_frame = pd.concat([su_frame, sd_frame, eu_frame, ed_frame, lu_frame, ld_frame])
+    v_frame['label_vertical'] = 1
+    v_frame = v_frame.reset_index(drop = True)
+    return w_frame, v_frame    
+
+    
+def visualize_vertical_transition_features(walking_frame, vertical_frame):
+    v_features_array = vertical_frame.as_matrix(columns=vertical_frame.columns)
+    w_features_array = walking_frame.as_matrix(columns=walking_frame.columns)
+    X = np.concatenate([w_features_array, v_features_array])
+    print(X.shape)
+    
+    windows_map = { 0:{'values':X[:,0], 'legend': 'skewness'}, 1:{'values':X[:,5], 'legend': 'gradient'},
+               2:{'values':X[:,3], 'legend':'kurtosis'}, 3:{'values':X[:,4], 'legend':'std deviation'},
+               4:{'values':X[:,1], 'legend':'percentile_windows'}, 5:{'values':X[:,2], 'legend': 'iqr'},
+               6:{'values':X[:,6], 'legend':'norm'}, 7:{'values':X[:,8], 'legend':'labels'}}
+
+    combos = list(combinations(list(range(len(windows_map.keys())-1)), 2))
+#     print(len(combos))
+
+    for combo in combos:
+        fig = plt.figure()
+        ax1 = fig.add_subplot(111)
+        ax1.scatter(windows_map[combo[0]]['values'][:len(walking_frame)], windows_map[combo[1]]['values'][:len(walking_frame)], c='r', alpha=0.5, label='walking')
+        ax1.scatter(windows_map[combo[0]]['values'][len(walking_frame):], windows_map[combo[1]]['values'][len(walking_frame):], c='b', alpha=0.5, label='vertical')
+        ax = plt.subplot()
+        ax.set_xlabel(windows_map[combo[0]]['legend'])
+        ax.set_ylabel(windows_map[combo[1]]['legend'])
+        ax.legend()
+        ax.grid(True)
+        plt.show()
+    
