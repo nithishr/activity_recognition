@@ -5,6 +5,20 @@ from sklearn.preprocessing import normalize
 from scipy.stats import skew, kurtosis
 from itertools import combinations
 import matplotlib.pyplot as plt
+from sklearn.model_selection import StratifiedKFold
+from sklearn.ensemble import RandomForestClassifier, AdaBoostClassifier,GradientBoostingClassifier
+from sklearn.model_selection import train_test_split
+from sklearn.model_selection import KFold
+from sklearn.preprocessing import OneHotEncoder
+from sklearn.metrics import accuracy_score, f1_score
+from sklearn.metrics import confusion_matrix
+from sklearn.linear_model import LogisticRegressionCV, SGDClassifier
+from sklearn import svm
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.gaussian_process import GaussianProcessClassifier
+from sklearn.naive_bayes import GaussianNB
+from sklearn import tree
+from sklearn.neural_network import MLPClassifier
 
 
 walking_files = ['Activity-Data/Samsung/Walk/Walk_N2/Walk_N2Pressure_clean.csv', 'Activity-Data/Samsung/Walk/Walk_N_3/Walk_N_3Pressure_clean.csv', 
@@ -72,6 +86,21 @@ def read_concatenate_files(filelist, usecols):
     output_frame = pd.concat(frame_list)
     return output_frame
     
+def visualize_pressure(input_file):
+    df = pd.read_csv(input_file, delimiter=',', header=0)
+    plt.figure()
+    plt.title(input_file)
+    plt.plot(df[' pressure'].values)
+
+    
+def remove_rows(index_list, input_file):
+    df = pd.read_csv(input_file, delimiter=',', header=0)
+    df1 = df.drop(index_list)
+#     visualize_pressure(df1)
+    output_file = input_file.split('.')[0] + '_clean.csv'
+    df1.to_csv(output_file, index=False)
+    return output_file
+
     
 def create_sliding_windows_by_time(data_frame, col_index, window_time_period=3000):
     windows = []
@@ -313,4 +342,123 @@ def visualize_vertical_transition_features(walking_frame, vertical_frame):
         ax.legend()
         ax.grid(True)
         plt.show()
+        
+
+def create_vertical_transition_dataset(walking_frame, vertical_frame):
+    v_features_array = vertical_frame.as_matrix(columns=vertical_frame.columns)
+    w_features_array = walking_frame.as_matrix(columns=walking_frame.columns)
+    X = np.concatenate([w_features_array, v_features_array])
+    Y = X[:,8]
+    X = X[:,:7]
+    return X, Y
     
+
+def classify_logistic_regression(XTrain, XTest, YTrain, YTest):
+    YPred = LogisticRegressionCV(solver = 'liblinear').fit(XTrain, YTrain).predict(XTest)
+    acc = accuracy_score(YTest, YPred)
+    f1 = f1_score(YTest, YPred)
+    return acc,f1    
+
+    
+def classify_sgd(XTrain, XTest, YTrain, YTest):
+    YPred = SGDClassifier().fit(XTrain, YTrain).predict(XTest)
+    acc = accuracy_score(YTest, YPred)
+    f1 = f1_score(YTest, YPred)
+    return acc,f1    
+    
+
+def classify_svm(XTrain, XTest, YTrain, YTest):
+    YPred = svm.SVC().fit(XTrain, YTrain).predict(XTest)
+    acc = accuracy_score(YTest, YPred)
+    f1 = f1_score(YTest, YPred)
+    return acc,f1   
+    
+
+def classify_linearSVM(XTrain, XTest, YTrain, YTest):
+    YPred = svm.LinearSVC().fit(XTrain, YTrain).predict(XTest)
+    acc = accuracy_score(YTest, YPred)
+    f1 = f1_score(YTest, YPred)
+    return acc,f1   
+    
+
+def classify_knn(XTrain, XTest, YTrain, YTest):
+    YPred = KNeighborsClassifier().fit(XTrain, YTrain).predict(XTest)
+    acc = accuracy_score(YTest, YPred)
+    f1 = f1_score(YTest, YPred)
+    return acc,f1   
+    
+
+def classify_gaussian_process_classifier(XTrain, XTest, YTrain, YTest):
+    YPred = GaussianProcessClassifier().fit(XTrain, YTrain).predict(XTest)
+    acc = accuracy_score(YTest, YPred)
+    f1 = f1_score(YTest, YPred)
+    return acc,f1   
+    
+    
+def classify_naive_bayes(XTrain, XTest, YTrain, YTest):
+    YPred = GaussianNB().fit(XTrain, YTrain).predict(XTest)
+    acc = accuracy_score(YTest, YPred)
+    f1 = f1_score(YTest, YPred)
+    return acc,f1   
+    
+
+def classify_decision_tree(XTrain, XTest, YTrain, YTest):
+    YPred = tree.DecisionTreeClassifier().fit(XTrain, YTrain).predict(XTest)
+    acc = accuracy_score(YTest, YPred)
+    f1 = f1_score(YTest, YPred)
+    return acc,f1   
+    
+
+def classify_random_forest(XTrain, XTest, YTrain, YTest):
+    YPred = RandomForestClassifier().fit(XTrain, YTrain).predict(XTest)
+    acc = accuracy_score(YTest, YPred)
+    f1 = f1_score(YTest, YPred)
+    return acc,f1   
+    
+
+def classify_ada_boost(XTrain, XTest, YTrain, YTest):
+    YPred = AdaBoostClassifier().fit(XTrain, YTrain).predict(XTest)
+    acc = accuracy_score(YTest, YPred)
+    f1 = f1_score(YTest, YPred)
+    return acc,f1   
+    
+
+def classify_gradient_boost(XTrain, XTest, YTrain, YTest):
+    YPred = GradientBoostingClassifier().fit(XTrain, YTrain).predict(XTest)
+    acc = accuracy_score(YTest, YPred)
+    f1 = f1_score(YTest, YPred)
+    return acc,f1   
+    
+
+def classify_neural_network(XTrain, XTest, YTrain, YTest):
+    YPred = MLPClassifier().fit(XTrain, YTrain).predict(XTest)
+    acc = accuracy_score(YTest, YPred)
+    f1 = f1_score(YTest, YPred)
+    return acc,f1   
+    
+
+def stratified_KFoldVal(X, Y, classify, n_folds=10):
+    accuracies = []
+    f1_scores = []
+    skf = StratifiedKFold(n_folds)
+    for train, test in skf.split(X,Y):
+        XTrain, XTest, YTrain, YTest = X[train], X[test], Y[train], Y[test]
+        acc, f1 = classify(XTrain, XTest, YTrain, YTest)
+        f1_scores.append(f1)
+        accuracies.append(acc)
+    return f1_scores, accuracies
+    
+
+def KFoldVal(X, Y, classify, n_folds=10):
+    accuracies = []
+    f1_scores = []
+    kf = KFold(n_folds)
+    for train, test in kf.split(X):
+        XTrain, XTest, YTrain, YTest = X[train], X[test], Y[train], Y[test]
+        acc, f1 = classify(XTrain, XTest, YTrain, YTest)
+        f1_scores.append(f1)
+        accuracies.append(acc)
+    return f1_scores, accuracies
+    
+
+
