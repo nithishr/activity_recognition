@@ -280,6 +280,7 @@ def compute_std_deviation_window(windows):
         std_windows.append(np.std(windows[i]))
     return std_windows
 
+
 def compute_percentile_norm_window(windows, percentile=50):
     percentile_windows = []
     for i in range(len(windows)):
@@ -426,6 +427,14 @@ def create_dataset_vertical_transition(w_frame, su_frame, sd_frame, eu_frame, ed
     v_frame = v_frame.reset_index(drop = True)
     return w_frame, v_frame    
 
+
+def create_dataset_direction(w_frame, su_frame, sd_frame, eu_frame, ed_frame, lu_frame, ld_frame):
+    u_frame = pd.concat([su_frame, eu_frame, lu_frame])
+    u_frame['label_direction'] = 0
+    d_frame = pd.concat([sd_frame, ed_frame, ld_frame])
+    d_frame['label_direction'] = 1
+    return u_frame, d_frame
+    
     
 def visualize_vertical_transition_features(walking_frame, vertical_frame):
     v_features_array = vertical_frame.as_matrix(columns=vertical_frame.columns)
@@ -453,11 +462,47 @@ def visualize_vertical_transition_features(walking_frame, vertical_frame):
         ax.grid(True)
         plt.show()
         
+        
+def visualize_direction_features(up_frame, down_frame):
+    u_features_array = up_frame.as_matrix(columns=up_frame.columns)
+    d_features_array = down_frame.as_matrix(columns=down_frame.columns)
+    X = np.concatenate([u_features_array, d_features_array])
+    print(X.shape)
+    
+    windows_map = { 0:{'values':X[:,0], 'legend': 'skewness'}, 1:{'values':X[:,5], 'legend': 'gradient'},
+               2:{'values':X[:,3], 'legend':'kurtosis'}, 3:{'values':X[:,4], 'legend':'std deviation'},
+               4:{'values':X[:,1], 'legend':'percentile_windows'}, 5:{'values':X[:,2], 'legend': 'iqr'},
+               6:{'values':X[:,6], 'legend':'norm'}, 7:{'values':X[:,8], 'legend':'labels'}}
 
+    combos = list(combinations(list(range(len(windows_map.keys())-1)), 2))
+#     print(len(combos))
+
+    for combo in combos:
+        fig = plt.figure()
+        ax1 = fig.add_subplot(111)
+        ax1.scatter(windows_map[combo[0]]['values'][:len(up_frame)], windows_map[combo[1]]['values'][:len(up_frame)], c='r', alpha=0.5, label='up')
+        ax1.scatter(windows_map[combo[0]]['values'][len(up_frame):], windows_map[combo[1]]['values'][len(up_frame):], c='b', alpha=0.5, label='down')
+        ax = plt.subplot()
+        ax.set_xlabel(windows_map[combo[0]]['legend'])
+        ax.set_ylabel(windows_map[combo[1]]['legend'])
+        ax.legend()
+        ax.grid(True)
+        plt.show()
+        
+        
 def create_vertical_transition_dataset(walking_frame, vertical_frame):
     v_features_array = vertical_frame.as_matrix(columns=vertical_frame.columns)
     w_features_array = walking_frame.as_matrix(columns=walking_frame.columns)
     X = np.concatenate([w_features_array, v_features_array])
+    Y = X[:,8]
+    X = X[:,:7]
+    return X, Y
+    
+    
+def create_direction_dataset(up_frame, down_frame):
+    u_features_array = up_frame.as_matrix(columns=up_frame.columns)
+    d_features_array = down_frame.as_matrix(columns=down_frame.columns)
+    X = np.concatenate([u_features_array, d_features_array])
     Y = X[:,8]
     X = X[:,:7]
     return X, Y
@@ -569,6 +614,54 @@ def KFoldVal(X, Y, classify, n_folds=10):
         f1_scores.append(f1)
         accuracies.append(acc)
     return f1_scores, accuracies
+
+
+def evaluate_stratified_ml_algorithms(X, Y, folds=10):
+    acc_skf_lr, f_skf_lr = stratified_KFoldVal(X, Y, classify_logistic_regression, folds)
+    acc_skf_sgd, f_skf_sgd = stratified_KFoldVal(X, Y, classify_sgd, folds)
+    acc_skf_svm, f_skf_svm = stratified_KFoldVal(X, Y, classify_svm, folds)
+    acc_skf_l_svm, f_skf_l_svm = stratified_KFoldVal(X, Y, classify_linearSVM, folds)
+    acc_skf_knn, f_skf_knn = stratified_KFoldVal(X, Y, classify_knn, folds)
+    acc_skf_gpc, f_skf_gpc = stratified_KFoldVal(X, Y, classify_gaussian_process_classifier, folds)
+    acc_skf_nb, f_skf_nb = stratified_KFoldVal(X, Y, classify_naive_bayes, folds)
+    acc_skf_dt, f_skf_dt = stratified_KFoldVal(X, Y, classify_decision_tree, folds)
+    acc_skf_rf, f_skf_rf = stratified_KFoldVal(X, Y, classify_random_forest, folds)
+    acc_skf_ab, f_skf_ab = stratified_KFoldVal(X, Y, classify_ada_boost, folds)
+    acc_skf_gb, f_skf_gb = stratified_KFoldVal(X, Y, classify_gradient_boost, folds)
+    acc_skf_nn, f_skf_nn = stratified_KFoldVal(X, Y, classify_neural_network, folds)
     
+    acc_list = [acc_skf_lr, acc_skf_sgd, acc_skf_svm, acc_skf_l_svm, acc_skf_knn, acc_skf_gpc, acc_skf_nb, 
+                acc_skf_dt, acc_skf_rf, acc_skf_ab, acc_skf_gb, acc_skf_nn]
+    f_list = [f_skf_lr, f_skf_sgd, f_skf_svm, f_skf_l_svm, f_skf_knn, f_skf_gpc, f_skf_nb, 
+                f_skf_dt, f_skf_rf, f_skf_ab, f_skf_gb, f_skf_nn]
+    avg_acc_list = list(map(avg, acc_list))
+    avg_f_list = list(map(avg, f_list))
+    labels_list = ["LR", "SGD", "SVM", "L-SVM", "KNN", "GPC", "NB", 
+                "DT", "RF", "AB", "GB", "NN"]
+    return avg_acc_list, avg_f_list, labels_list
+    
+        
+def avg(lst):
+    return sum(lst)/len(lst)
+    
+    
+def plot_performance(avg_acc, avg_f, l_list):
+    N = len(avg_f)
 
+    ind = np.arange(N)  # the x locations for the groups
+    width = 0.4       # the width of the bars
 
+    fig, ax = plt.subplots()
+    rects1 = ax.bar(ind, avg_acc, width, color='r')
+
+    rects2 = ax.bar(ind + width, avg_f, width, color='y')
+
+    # add some text for labels, title and axes ticks
+    ax.set_ylabel('Scores')
+    ax.set_title('Scores by algorithm')
+    ax.set_xticks(ind + width / 2)
+    ax.set_xticklabels(l_list)
+
+    ax.legend((rects1[0], rects2[0]), ('Accuracy', 'F-Score'), loc='lower right')
+
+    plt.show()
