@@ -80,7 +80,10 @@ climbing_files = ['Activity-Data/Samsung/Climbing_Up/Climb_Up_1/Climb_Up_1Pressu
 				 'Activity-Data/3112/Stairs_up/6/Su_5Pressure_clean.csv',
 				 'Activity-Data/3112/Stairs_up/7/Su_6Pressure_clean.csv',
 				 'Activity-Data/3112/Stairs_up/8/Su_7Pressure_clean.csv',
-				 'Activity-Data/3112/Stairs_up/9/Su_8Pressure_clean.csv']
+				 'Activity-Data/3112/Stairs_up/9/Su_8Pressure_clean.csv',
+				 'Activity-Data/3212/Stairs_up/1/Su_2Pressure_clean.csv',
+				 'Activity-Data/3212/Stairs_up/2/Su_8Pressure_clean.csv',
+				 'Activity-Data/3212/Stairs_up/3/Su_11Pressure_clean.csv']
                  
  
 downstairs_files = ['Activity-Data/Samsung/Climbing_Down/Climb_Down_1/Climb_Down_1Pressure_clean.csv', 
@@ -127,7 +130,11 @@ downstairs_files = ['Activity-Data/Samsung/Climbing_Down/Climb_Down_1/Climb_Down
 					'Activity-Data/3112/Stairs_down/4/Sd_3Pressure_clean.csv',
 					'Activity-Data/3112/Stairs_down/5/Sd_5Pressure_clean.csv',
 					'Activity-Data/3112/Stairs_down/6/Sd_6Pressure_clean.csv',
-					'Activity-Data/3112/Stairs_down/7/Sd_3Pressure_clean.csv'
+					'Activity-Data/3112/Stairs_down/7/Sd_3Pressure_clean.csv',
+					'Activity-Data/3212/Stairs_down/1/Sd_7Pressure_clean.csv',
+					'Activity-Data/3212/Stairs_down/2/Sd_9Pressure_clean.csv',
+					'Activity-Data/3212/Stairs_down/3/Sd_10Pressure_clean.csv',
+					'Activity-Data/3212/Stairs_down/4/Sd_15Pressure_clean.csv'
                    ]
 
 escalator_up_files = ['Activity-Data/1912/Esc_Up/1/Esc_up_1Pressure_clean.csv',
@@ -180,7 +187,13 @@ escalator_down_files = ['Activity-Data/Samsung/061217/Esc_down/Esc_down_1/Esc_do
 						'Activity-Data/3012/Escalator_down/1/Ed_0Pressure_clean.csv',
 						'Activity-Data/3112/Esc_down/1/Ed_0Pressure_clean.csv',
 						'Activity-Data/3112/Esc_down/2/Ed_1Pressure_clean.csv',
-						'Activity-Data/3112/Esc_down/3/Ed_5Pressure_clean.csv']
+						'Activity-Data/3112/Esc_down/3/Ed_5Pressure_clean.csv',
+						'Activity-Data/3212/Esc_down/1/Ed_3Pressure_clean.csv',
+						'Activity-Data/3212/Esc_down/2/Ed_4Pressure_clean.csv',
+						'Activity-Data/3212/Esc_down/3/Ed_8Pressure_clean.csv',
+						'Activity-Data/3212/Esc_down/4/Ed_13Pressure_clean.csv',
+						'Activity-Data/3212/Esc_down/5/Ed_15Pressure_clean.csv',
+						'Activity-Data/3212/Esc_down/6/Ed_18Pressure_clean.csv']
                         
 lift_up_files = ['Activity-Data/1912/Lift_Up/1/Lift_up_1Pressure_clean.csv', 
 				 'Activity-Data/1912/Lift_Up/2/Lift_up_4Pressure_clean.csv',
@@ -199,7 +212,12 @@ lift_up_files = ['Activity-Data/1912/Lift_Up/1/Lift_up_1Pressure_clean.csv',
 				 'Activity-Data/3112/Lift_up/3/Lu_0Pressure_clean.csv',
 				 'Activity-Data/3112/Lift_up/4/Lu_1Pressure_clean.csv',
 				 'Activity-Data/3112/Lift_up/5/Lu_3Pressure_clean.csv',
-				 'Activity-Data/3112/Lift_up/6/Lu_7Pressure_clean.csv']
+				 'Activity-Data/3112/Lift_up/6/Lu_7Pressure_clean.csv',
+				 'Activity-Data/3212/Lift_up/1/Lu_0Pressure_clean.csv',
+				 'Activity-Data/3212/Lift_up/2/Lu_1Pressure_clean.csv',
+				 'Activity-Data/3212/Lift_up/3/Lu_5Pressure_clean.csv',
+				 'Activity-Data/3212/Lift_up/4/Lu_7Pressure_clean.csv',
+				 'Activity-Data/3212/Lift_up/5/Lu_10Pressure_clean.csv']
 
 lift_down_files = ['Activity-Data/1912/Lift_Down/1/Lift_down_9Pressure_clean.csv',
 				   'Activity-Data/Samsung/061217/Lift_Down/1/Lift_Down_2Pressure_clean.csv',
@@ -215,7 +233,9 @@ lift_down_files = ['Activity-Data/1912/Lift_Down/1/Lift_down_9Pressure_clean.csv
 				   'Activity-Data/3012/Lift_down/1/Ld_0Pressure_clean.csv',
 				   'Activity-Data/3112/Lift_down/1/Ld_0Pressure_clean.csv',
 				   'Activity-Data/3112/Lift_down/2/Ld_1Pressure_clean.csv',
-				   'Activity-Data/3112/Lift_down/3/Ld_3Pressure_clean.csv']
+				   'Activity-Data/3112/Lift_down/3/Ld_3Pressure_clean.csv',
+				   'Activity-Data/3212/Lift_down/1/Ld_0Pressure_clean.csv',
+				   'Activity-Data/3212/Lift_down/2/Ld_1Pressure_clean.csv']
                  											 
                    
                    
