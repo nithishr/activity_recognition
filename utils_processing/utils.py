@@ -50,7 +50,6 @@ climbing_files = ['Activity-Data/Samsung/Climbing_Up/Climb_Up_1/Climb_Up_1Pressu
 				 'Activity-Data/Samsung/Climbing_Up/Climb_Up_2/Climb_Up_2Pressure_clean.csv',    
                  'Activity-Data/Samsung/Climbing_Up/Climb_Up_3/Climb_Up_3Pressure_clean.csv',
                  'Activity-Data/Samsung/Climbing_Up/Climb_Up_4/Climb_Up_4Pressure_clean.csv',    
-                 'Activity-Data/Samsung/Climbing_Up/Climb_Up_4/Climb_Up_4Pressure_clean.csv', 
                  'Activity-Data/Samsung/Climbing_Up/Climb_Up_6/Climb_Up_6Pressure_clean.csv',
                  'Activity-Data/Samsung/Climbing_Up/Climb_Up_7/Climb_Up_7Pressure_clean.csv', 
                  'Activity-Data/Samsung/Climbing_Up/Climb_Up_8/Climb_Up_8Pressure_clean.csv',
