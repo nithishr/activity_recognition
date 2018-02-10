@@ -10,7 +10,7 @@ from sklearn.ensemble import RandomForestClassifier, AdaBoostClassifier,Gradient
 from sklearn.model_selection import train_test_split
 from sklearn.model_selection import KFold
 from sklearn.preprocessing import OneHotEncoder
-from sklearn.metrics import accuracy_score, f1_score
+from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score
 from sklearn.metrics import confusion_matrix
 from sklearn.linear_model import LogisticRegressionCV, SGDClassifier
 from sklearn import svm
@@ -644,133 +644,171 @@ def classify_logistic_regression(XTrain, XTest, YTrain, YTest):
     YPred = LogisticRegressionCV(solver = 'liblinear').fit(XTrain, YTrain).predict(XTest)
     acc = accuracy_score(YTest, YPred)
     f1 = f1_score(YTest, YPred)
-    return acc,f1    
+    prec = precision_score(YTest, YPred)
+    recall = recall_score(YTest, YPred)
+    return acc,f1, prec, recall
 
     
 def classify_sgd(XTrain, XTest, YTrain, YTest):
     YPred = SGDClassifier().fit(XTrain, YTrain).predict(XTest)
     acc = accuracy_score(YTest, YPred)
     f1 = f1_score(YTest, YPred)
-    return acc,f1    
+    prec = precision_score(YTest, YPred)
+    recall = recall_score(YTest, YPred)
+    return acc,f1, prec, recall
     
 
 def classify_svm(XTrain, XTest, YTrain, YTest):
     YPred = svm.SVC().fit(XTrain, YTrain).predict(XTest)
     acc = accuracy_score(YTest, YPred)
     f1 = f1_score(YTest, YPred)
-    return acc,f1   
+    prec = precision_score(YTest, YPred)
+    recall = recall_score(YTest, YPred)
+    return acc,f1, prec, recall
     
 
 def classify_linearSVM(XTrain, XTest, YTrain, YTest):
     YPred = svm.LinearSVC().fit(XTrain, YTrain).predict(XTest)
     acc = accuracy_score(YTest, YPred)
     f1 = f1_score(YTest, YPred)
-    return acc,f1   
+    prec = precision_score(YTest, YPred)
+    recall = recall_score(YTest, YPred)
+    return acc,f1, prec, recall
     
 
 def classify_knn(XTrain, XTest, YTrain, YTest):
     YPred = KNeighborsClassifier().fit(XTrain, YTrain).predict(XTest)
     acc = accuracy_score(YTest, YPred)
     f1 = f1_score(YTest, YPred)
-    return acc,f1   
+    prec = precision_score(YTest, YPred)
+    recall = recall_score(YTest, YPred)
+    return acc,f1, prec, recall
     
 
 def classify_gaussian_process_classifier(XTrain, XTest, YTrain, YTest):
     YPred = GaussianProcessClassifier().fit(XTrain, YTrain).predict(XTest)
     acc = accuracy_score(YTest, YPred)
     f1 = f1_score(YTest, YPred)
-    return acc,f1   
+    prec = precision_score(YTest, YPred)
+    recall = recall_score(YTest, YPred)
+    return acc,f1, prec, recall
     
     
 def classify_naive_bayes(XTrain, XTest, YTrain, YTest):
     YPred = GaussianNB().fit(XTrain, YTrain).predict(XTest)
     acc = accuracy_score(YTest, YPred)
     f1 = f1_score(YTest, YPred)
-    return acc,f1   
+    prec = precision_score(YTest, YPred)
+    recall = recall_score(YTest, YPred)
+    return acc,f1, prec, recall
     
 
 def classify_decision_tree(XTrain, XTest, YTrain, YTest):
     YPred = tree.DecisionTreeClassifier().fit(XTrain, YTrain).predict(XTest)
     acc = accuracy_score(YTest, YPred)
     f1 = f1_score(YTest, YPred)
-    return acc,f1   
+    prec = precision_score(YTest, YPred)
+    recall = recall_score(YTest, YPred)
+    return acc,f1, prec, recall
     
 
 def classify_random_forest(XTrain, XTest, YTrain, YTest):
     YPred = RandomForestClassifier().fit(XTrain, YTrain).predict(XTest)
     acc = accuracy_score(YTest, YPred)
     f1 = f1_score(YTest, YPred)
-    return acc,f1   
+    prec = precision_score(YTest, YPred)
+    recall = recall_score(YTest, YPred)
+    return acc,f1, prec, recall 
     
 
 def classify_ada_boost(XTrain, XTest, YTrain, YTest):
     YPred = AdaBoostClassifier().fit(XTrain, YTrain).predict(XTest)
     acc = accuracy_score(YTest, YPred)
     f1 = f1_score(YTest, YPred)
-    return acc,f1   
+    prec = precision_score(YTest, YPred)
+    recall = recall_score(YTest, YPred)
+    return acc,f1, prec, recall
     
 
 def classify_gradient_boost(XTrain, XTest, YTrain, YTest):
     YPred = GradientBoostingClassifier().fit(XTrain, YTrain).predict(XTest)
     acc = accuracy_score(YTest, YPred)
     f1 = f1_score(YTest, YPred)
-    return acc,f1   
+    prec = precision_score(YTest, YPred)
+    recall = recall_score(YTest, YPred)
+    return acc,f1, prec, recall
     
 
 def classify_neural_network(XTrain, XTest, YTrain, YTest):
     YPred = MLPClassifier().fit(XTrain, YTrain).predict(XTest)
     acc = accuracy_score(YTest, YPred)
     f1 = f1_score(YTest, YPred)
-    return acc,f1   
+    prec = precision_score(YTest, YPred)
+    recall = recall_score(YTest, YPred)
+    return acc,f1, prec, recall
     
 
 def stratified_KFoldVal(X, Y, classify, n_folds=10):
     accuracies = []
     f1_scores = []
+    precisions = []
+    recalls = []
     skf = StratifiedKFold(n_folds)
     for train, test in skf.split(X,Y):
         XTrain, XTest, YTrain, YTest = X[train], X[test], Y[train], Y[test]
-        acc, f1 = classify(XTrain, XTest, YTrain, YTest)
+        acc, f1, prec, recall = classify(XTrain, XTest, YTrain, YTest)
         f1_scores.append(f1)
         accuracies.append(acc)
-    return f1_scores, accuracies
+        precisions.append(prec)
+        recalls.append(recall)
+    return f1_scores, accuracies, precisions, recalls
     
 
 def KFoldVal(X, Y, classify, n_folds=10):
     accuracies = []
     f1_scores = []
+	precisions = []
+    recalls = []
     kf = KFold(n_folds)
     for train, test in kf.split(X):
         XTrain, XTest, YTrain, YTest = X[train], X[test], Y[train], Y[test]
-        acc, f1 = classify(XTrain, XTest, YTrain, YTest)
+        acc, f1, prec, recall = classify(XTrain, XTest, YTrain, YTest)
         f1_scores.append(f1)
         accuracies.append(acc)
-    return f1_scores, accuracies
+        precisions.append(prec)
+        recalls.append(recall)
+    return f1_scores, accuracies, precisions, recalls
 
 
 def evaluate_stratified_ml_algorithms(X, Y, folds=10):
-    acc_skf_lr, f_skf_lr = stratified_KFoldVal(X, Y, classify_logistic_regression, folds)
-    acc_skf_sgd, f_skf_sgd = stratified_KFoldVal(X, Y, classify_sgd, folds)
-    acc_skf_svm, f_skf_svm = stratified_KFoldVal(X, Y, classify_svm, folds)
-    acc_skf_l_svm, f_skf_l_svm = stratified_KFoldVal(X, Y, classify_linearSVM, folds)
-    acc_skf_knn, f_skf_knn = stratified_KFoldVal(X, Y, classify_knn, folds)
-    acc_skf_gpc, f_skf_gpc = stratified_KFoldVal(X, Y, classify_gaussian_process_classifier, folds)
-    acc_skf_nb, f_skf_nb = stratified_KFoldVal(X, Y, classify_naive_bayes, folds)
-    acc_skf_dt, f_skf_dt = stratified_KFoldVal(X, Y, classify_decision_tree, folds)
-    acc_skf_rf, f_skf_rf = stratified_KFoldVal(X, Y, classify_random_forest, folds)
-    acc_skf_ab, f_skf_ab = stratified_KFoldVal(X, Y, classify_ada_boost, folds)
-    acc_skf_gb, f_skf_gb = stratified_KFoldVal(X, Y, classify_gradient_boost, folds)
-    acc_skf_nn, f_skf_nn = stratified_KFoldVal(X, Y, classify_neural_network, folds)
+    acc_skf_lr, f_skf_lr, p_skf_lr, r_skf_lr = stratified_KFoldVal(X, Y, classify_logistic_regression, folds)
+    acc_skf_sgd, f_skf_sgd, p_skf_sgd, r_skf_sgd = stratified_KFoldVal(X, Y, classify_sgd, folds)
+    acc_skf_svm, f_skf_svm, p_skf_svm, r_skf_svm = stratified_KFoldVal(X, Y, classify_svm, folds)
+    acc_skf_l_svm, f_skf_l_svm, p_skf_l_svm, r_skf_l_svm = stratified_KFoldVal(X, Y, classify_linearSVM, folds)
+    acc_skf_knn, f_skf_knn, p_skf_knn, r_skf_knn = stratified_KFoldVal(X, Y, classify_knn, folds)
+    acc_skf_gpc, f_skf_gpc, p_skf_gpc, r_skf_gpc = stratified_KFoldVal(X, Y, classify_gaussian_process_classifier, folds)
+    acc_skf_nb, f_skf_nb, p_skf_nb, r_skf_nb = stratified_KFoldVal(X, Y, classify_naive_bayes, folds)
+    acc_skf_dt, f_skf_dt, p_skf_dt, r_skf_dt = stratified_KFoldVal(X, Y, classify_decision_tree, folds)
+    acc_skf_rf, f_skf_rf, p_skf_rf, r_skf_rf = stratified_KFoldVal(X, Y, classify_random_forest, folds)
+    acc_skf_ab, f_skf_ab, p_skf_ab, r_skf_ab = stratified_KFoldVal(X, Y, classify_ada_boost, folds)
+    acc_skf_gb, f_skf_gb, p_skf_gb, r_skf_gb = stratified_KFoldVal(X, Y, classify_gradient_boost, folds)
+    acc_skf_nn, f_skf_nn, p_skf_nn, r_skf_nn = stratified_KFoldVal(X, Y, classify_neural_network, folds)
     
     acc_list = [acc_skf_lr, acc_skf_sgd, acc_skf_svm, acc_skf_l_svm, acc_skf_knn, acc_skf_gpc, acc_skf_nb, 
                 acc_skf_dt, acc_skf_rf, acc_skf_ab, acc_skf_gb, acc_skf_nn]
     f_list = [f_skf_lr, f_skf_sgd, f_skf_svm, f_skf_l_svm, f_skf_knn, f_skf_gpc, f_skf_nb, 
                 f_skf_dt, f_skf_rf, f_skf_ab, f_skf_gb, f_skf_nn]
+	p_list = [p_skf_lr, p_skf_sgd, p_skf_svm, p_skf_l_svm, p_skf_knn, p_skf_gpc, p_skf_nb, 
+                p_skf_dt, p_skf_rf, p_skf_ab, p_skf_gb, p_skf_nn]
+	r_list = [r_skf_lr, r_skf_sgd, r_skf_svm, r_skf_l_svm, r_skf_knn, r_skf_gpc, r_skf_nb, 
+                r_skf_dt, r_skf_rf, r_skf_ab, r_skf_gb, r_skf_nn]
     avg_acc_list = list(map(avg, acc_list))
     avg_f_list = list(map(avg, f_list))
+    avg_p_list = list(map(avg, p_list))
+    avg_r_list = list(map(avg, r_list))
     labels_list = ["LR", "SGD", "SVM", "L-SVM", "KNN", "GPC", "NB", 
                 "DT", "RF", "AB", "GB", "NN"]
-    return avg_acc_list, avg_f_list, labels_list
+    return avg_acc_list, avg_f_list, labels_list, avg_p_list, avg_r_list
     
         
 def avg(lst):
@@ -797,3 +835,416 @@ def plot_performance(avg_acc, avg_f, l_list):
     ax.legend((rects1[0], rects2[0]), ('Accuracy', 'F-Score'), loc='lower right')
 
     plt.show()
+
+
+def plot_performance_all(avg_acc, avg_f, l_list, avg_p, avg_r):
+    N = len(avg_f)
+
+    ind = np.arange(N)  # the x locations for the groups
+    width = 0.2       # the width of the bars
+
+    fig, ax = plt.subplots()
+    rects1 = ax.bar(ind, avg_acc, width, color='r')
+
+    rects2 = ax.bar(ind + width, avg_f, width, color='g')
+    rects3 = ax.bar(ind + 2*width, avg_p, width, color='b')
+    rects4 = ax.bar(ind + 3*width, avg_r, width, color='y')
+
+    # add some text for labels, title and axes ticks
+    ax.set_ylabel('Scores')
+    ax.set_title('Scores by algorithm')
+    ax.set_xticks(ind + width / 2)
+    ax.set_xticklabels(l_list)
+
+    ax.legend((rects1[0], rects2[0], rects3[0], rects4[0]), ('Accuracy', 'F-Score', 'Precision', 'Recall'), loc='lower right')
+
+    plt.show()
+
+
+climbing_files_acc = ['Activity-Data/Samsung/Climbing_Up/Climb_Up_1/Climb_Up_1Acceleration.csv',
+                 'Activity-Data/Samsung/Climbing_Up/Climb_Up_2/Climb_Up_2Acceleration.csv',    
+                 'Activity-Data/Samsung/Climbing_Up/Climb_Up_3/Climb_Up_3Acceleration.csv',
+                 'Activity-Data/Samsung/Climbing_Up/Climb_Up_4/Climb_Up_4Acceleration.csv',    
+                 'Activity-Data/Samsung/Climbing_Up/Climb_Up_6/Climb_Up_6Acceleration.csv',
+                 'Activity-Data/Samsung/Climbing_Up/Climb_Up_7/Climb_Up_7Acceleration.csv', 
+                 'Activity-Data/Samsung/Climbing_Up/Climb_Up_8/Climb_Up_8Acceleration.csv',
+                 'Activity-Data/Climbing_Stairs/1/Climbing_Stairs1Acceleration.csv', 
+                 'Activity-Data/Climbing_Stairs/2/Climbing_Stairs2Acceleration.csv', 
+                 'Activity-Data/Climbing_Stairs/3/Climbing_Stairs3Acceleration.csv',
+                 'Activity-Data/Climbing_Stairs/5/Climbing_Stairs5Acceleration.csv',
+                 'Activity-Data/Climbing_Stairs/6/Climbing_Stairs6Acceleration.csv', 
+                 'Activity-Data/Climbing_Stairs/7/Climbing_Stairs7Acceleration.csv',
+                 'Activity-Data/1912/Stairs_Up/1/Stairs_up_1Acceleration.csv', 
+                 'Activity-Data/1912/Stairs_Up/2/Stairs_up_2Acceleration.csv',
+                 'Activity-Data/1912/Stairs_Up/3/Stairs_up_3Acceleration.csv', 
+                 'Activity-Data/1912/Stairs_Up/4/Stairs_up_4Acceleration.csv',
+                 'Activity-Data/1912/Stairs_Up/5/Stairs_up_5Acceleration.csv', 
+                 'Activity-Data/2012/Stairs_Up/1/Stairs_up_1Acceleration.csv', 
+                 'Activity-Data/2012/Stairs_Up/2/Stairs_up_2Acceleration.csv', 
+                 'Activity-Data/2012/Stairs_Up/3/Stairs_up_3Acceleration.csv', 
+                 'Activity-Data/2012/Stairs_Up/4/Stairs_up_4Acceleration.csv', 
+                 'Activity-Data/2012/Stairs_Up/5/Stairs_up_5Acceleration.csv',
+                 'Activity-Data/2912/Stairs_up/1/Su_1Acceleration.csv',
+                 'Activity-Data/3012/Stairs_up/1/Su_0Acceleration.csv',
+                 'Activity-Data/3112/Stairs_up/1/Su_0Acceleration.csv',
+                 'Activity-Data/3112/Stairs_up/2/Su_1Acceleration.csv',
+                 'Activity-Data/3112/Stairs_up/3/Su_2Acceleration.csv',
+                 'Activity-Data/3112/Stairs_up/4/Su_3Acceleration.csv',
+                 'Activity-Data/3112/Stairs_up/5/Su_4Acceleration.csv',
+                 'Activity-Data/3112/Stairs_up/6/Su_5Acceleration.csv',
+                 'Activity-Data/3112/Stairs_up/7/Su_6Acceleration.csv',
+                 'Activity-Data/3112/Stairs_up/8/Su_7Acceleration.csv',
+                 'Activity-Data/3112/Stairs_up/9/Su_8Acceleration.csv',
+                 'Activity-Data/3212/Stairs_up/1/Su_2Acceleration.csv',
+                 'Activity-Data/3212/Stairs_up/2/Su_8Acceleration.csv',
+                 'Activity-Data/3212/Stairs_up/3/Su_11Acceleration.csv',
+                 'Activity-Data/3312/Stairs_up/1/Su_0Acceleration.csv',
+                 'Activity-Data/3312/Stairs_up/2/Su_1Acceleration.csv',
+                 'Activity-Data/3312/Stairs_up/3/Su_6Acceleration.csv',
+                 'Activity-Data/3312/Stairs_up/4/Su_8Acceleration.csv',
+                 'Activity-Data/3312/Stairs_up/5/Su_9Acceleration.csv',
+                 'Activity-Data/3312/Stairs_up/6/Su_10Acceleration.csv',
+                 'Activity-Data/3312/Stairs_up/7/Su_18Acceleration.csv',
+                 'Activity-Data/3312/Stairs_up/8/Sup_4Acceleration.csv',
+                 'Activity-Data/3412/Stairs_up/1/Su_0Acceleration.csv',
+                 'Activity-Data/3412/Stairs_up/2/Su_1Acceleration.csv',
+                 'Activity-Data/3412/Stairs_up/3/Su_2Acceleration.csv',
+                 'Activity-Data/3412/Stairs_up/4/Su_3Acceleration.csv',
+                 'Activity-Data/3412/Stairs_up/5/Su_4Acceleration.csv',
+                 'Activity-Data/3412/Stairs_up/6/Su_5Acceleration.csv',
+                 'Activity-Data/3412/Stairs_up/7/Su_6Acceleration.csv',
+                 'Activity-Data/3512/Stairs_up/1/Su_0Acceleration.csv',
+                 'Activity-Data/3512/Stairs_up/2/Su_2Acceleration.csv',
+                 'Activity-Data/3512/Stairs_up/3/Su_0Acceleration.csv']
+                 
+downstairs_files_acc = ['Activity-Data/Samsung/Climbing_Down/Climb_Down_1/Climb_Down_1Acceleration.csv', 
+                    'Activity-Data/Samsung/Climbing_Down/Climb_Down_2/Climb_Down_2Acceleration.csv',    
+                    'Activity-Data/Samsung/Climbing_Down/Climb_Down_3/Climb_Down_3Acceleration.csv', 
+                    'Activity-Data/Samsung/Climbing_Down/Climb_Down_6/Climb_Down_6Acceleration.csv',
+                    'Activity-Data/Samsung/Climbing_Down/Climb_Down_8/Climb_Down_8Acceleration.csv', 
+                    'Activity-Data/Samsung/Climbing_Down/Climb_Down_9/Climb_Down_9Acceleration.csv',
+                    'Activity-Data/Downstairs/1/Downstairs1Acceleration.csv', 
+                    'Activity-Data/Downstairs/2/Downstairs2Acceleration.csv', 
+                    'Activity-Data/Downstairs/3/Downstairs3Acceleration.csv', 
+                    'Activity-Data/Downstairs/4/Downstairs4Acceleration.csv',
+                    'Activity-Data/Downstairs/5/Downstairs5Acceleration.csv', 
+                    'Activity-Data/Downstairs/6/Downstairs6Acceleration.csv',
+                    'Activity-Data/1912/Stairs_Down/1/Stairs_down_1Acceleration.csv',
+                    'Activity-Data/1912/Stairs_Down/2/Stairs_down_2Acceleration.csv',
+                    'Activity-Data/1912/Stairs_Down/3/Stairs_down_3Acceleration.csv',
+                    'Activity-Data/1912/Stairs_Down/4/Stairs_down_4Acceleration.csv',
+                    'Activity-Data/1912/Stairs_Down/5/Stairs_down_5Acceleration.csv',
+                    'Activity-Data/2012/Stairs_Down/1/Stairs_down_1Acceleration.csv', 
+                    'Activity-Data/2012/Stairs_Down/2/Stairs_down_2Acceleration.csv', 
+                    'Activity-Data/2012/Stairs_Down/3/Stairs_down_3Acceleration.csv', 
+                    'Activity-Data/2012/Stairs_Down/4/Stairs_down_4Acceleration.csv', 
+                    'Activity-Data/2012/Stairs_Down/5/Stairs_down_5Acceleration.csv',
+                    'Activity-Data/2812/Stairs_down/1/Sd_3Acceleration.csv',
+                    'Activity-Data/2812/Stairs_down/2/Sd_4Acceleration.csv',
+                    'Activity-Data/2812/Stairs_up/1/Su_1Acceleration.csv',
+                    'Activity-Data/2812/Stairs_up/10/Sup_5Acceleration.csv',
+                    'Activity-Data/2812/Stairs_up/11/Sup_6Acceleration.csv',
+                    'Activity-Data/2812/Stairs_up/12/SUP_1Acceleration.csv',
+                    'Activity-Data/2812/Stairs_up/2/Su_2Acceleration.csv',
+                    'Activity-Data/2812/Stairs_up/3/Su_3Acceleration.csv',
+                    'Activity-Data/2812/Stairs_up/4/Su_4Acceleration.csv',
+                    'Activity-Data/2812/Stairs_up/5/Su_5Acceleration.csv',
+                    'Activity-Data/2812/Stairs_up/6/Su_6Acceleration.csv',
+                    'Activity-Data/2812/Stairs_up/7/Sup2Acceleration.csv',
+                    'Activity-Data/2812/Stairs_up/8/Sup3Acceleration.csv',
+                    'Activity-Data/2812/Stairs_up/9/Sup4Acceleration.csv',
+                    'Activity-Data/2912/Stairs_down/1/Sd_2Acceleration.csv',
+                    'Activity-Data/3012/Stairs_down/1/Sd_0Acceleration.csv',
+                    'Activity-Data/3112/Stairs_down/1/Sd_0Acceleration.csv',
+                    'Activity-Data/3112/Stairs_down/2/Sd_1Acceleration.csv',
+                    'Activity-Data/3112/Stairs_down/3/Sd_2Acceleration.csv',
+                    'Activity-Data/3112/Stairs_down/4/Sd_3Acceleration.csv',
+                    'Activity-Data/3112/Stairs_down/5/Sd_5Acceleration.csv',
+                    'Activity-Data/3112/Stairs_down/6/Sd_6Acceleration.csv',
+                    'Activity-Data/3112/Stairs_down/7/Sd_3Acceleration.csv',
+                    'Activity-Data/3212/Stairs_down/1/Sd_7Acceleration.csv',
+                    'Activity-Data/3212/Stairs_down/2/Sd_9Acceleration.csv',
+                    'Activity-Data/3212/Stairs_down/3/Sd_10Acceleration.csv',
+                    'Activity-Data/3212/Stairs_down/4/Sd_15Acceleration.csv',
+                    'Activity-Data/3312/Stairs_down/1/Sd_1Acceleration.csv',
+                    'Activity-Data/3312/Stairs_down/2/Sd_4Acceleration.csv',
+                    'Activity-Data/3312/Stairs_down/3/Sd_8Acceleration.csv',
+                    'Activity-Data/3312/Stairs_down/4/Sd_10Acceleration.csv',
+                    'Activity-Data/3312/Stairs_down/5/Sd_16Acceleration.csv',
+                    'Activity-Data/3312/Stairs_down/6/Sd_18Acceleration.csv',
+                    'Activity-Data/3312/Stairs_down/7/Sd_20Acceleration.csv',
+                    'Activity-Data/3412/Stairs_down/1/Sd_0Acceleration.csv',
+                    'Activity-Data/3412/Stairs_down/2/Sd_1Acceleration.csv',
+                    'Activity-Data/3412/Stairs_down/3/Sd_2Acceleration.csv',
+                    'Activity-Data/3412/Stairs_down/4/Sd_3Acceleration.csv',
+                    'Activity-Data/3512/Stairs_down/1/Sd_0Acceleration.csv',
+                    'Activity-Data/3512/Stairs_down/2/Sd_1Acceleration.csv',
+                    'Activity-Data/3512/Stairs_down/3/Sd_2Acceleration.csv',
+                    'Activity-Data/3512/Stairs_down/4/Sd_3Acceleration.csv',
+                    'Activity-Data/3512/Stairs_down/5/Sd_4Acceleration.csv',
+                    'Activity-Data/3512/Stairs_down/6/Sd_0Acceleration.csv',
+                    'Activity-Data/3512/Stairs_down/7/Sd_1Acceleration.csv'
+                   ]
+                   
+escalator_up_files_acc = ['Activity-Data/1912/Esc_Up/1/Esc_up_1Acceleration.csv',
+                      'Activity-Data/1912/Esc_Up/2/Esc_up_2Acceleration.csv',
+                      'Activity-Data/1912/Esc_Up/3/Esc_up_3Acceleration.csv',
+                      'Activity-Data/1912/Esc_Up/4/Esc_Up_4Acceleration.csv',
+                      'Activity-Data/Samsung/061217/Esc_Up/Esc_Up_1/Esc_Up_1Acceleration.csv',
+                      'Activity-Data/Samsung/061217/Esc_Up/Esc_Up_2/Esc_Up_2Acceleration.csv',
+                      'Activity-Data/Samsung/061217/Esc_Up/3/Esc_Up_3Acceleration.csv',
+                      'Activity-Data/Samsung/061217/Esc_Up/4/Esc_up_4Acceleration.csv',
+                      'Activity-Data/Samsung/061217/Esc_Up/5/Esc_up_5Acceleration.csv', 
+                      'Activity-Data/2012/Esc_Up/1/Esc_up_1Acceleration.csv',
+                      'Activity-Data/2812/Escalator_up/1/Eu_1Acceleration.csv',
+                      'Activity-Data/2812/Escalator_up/10/Eu_12Acceleration.csv',
+                      'Activity-Data/2812/Escalator_up/11/Eu_13Acceleration.csv',
+                      'Activity-Data/2812/Escalator_up/12/Eu_14Acceleration.csv',
+                      'Activity-Data/2812/Escalator_up/2/Eu_2Acceleration.csv',
+                      'Activity-Data/2812/Escalator_up/3/Eu_3Acceleration.csv',
+                      'Activity-Data/2812/Escalator_up/4/Eu_4Acceleration.csv',
+                      'Activity-Data/2812/Escalator_up/5/Eu_5Acceleration.csv',
+                      'Activity-Data/2812/Escalator_up/6/Eu_6Acceleration.csv',
+                      'Activity-Data/2812/Escalator_up/7/Eu_7Acceleration.csv',
+                      'Activity-Data/2812/Escalator_up/8/Eu_8Acceleration.csv',
+                      'Activity-Data/2812/Escalator_up/9/Eu_11Acceleration.csv',
+                      'Activity-Data/2912/Escalator_up/1/Eu_1Acceleration.csv',
+                      'Activity-Data/2912/Escalator_up/2/Eu_2Acceleration.csv',
+                      'Activity-Data/2912/Escalator_up/3/Eu_5Acceleration.csv',
+                      'Activity-Data/2912/Escalator_up/4/Eu_6Acceleration.csv',
+                      'Activity-Data/2912/Escalator_up/5/Eu_7Acceleration.csv',
+                      'Activity-Data/3012/Escalator_up/1/Eu_0Acceleration.csv',
+                      'Activity-Data/3012/Escalator_up/2/Eu_2Acceleration.csv',
+                      'Activity-Data/3012/Escalator_up/3/Eu_3Acceleration.csv',
+                      'Activity-Data/3112/Esc_up/1/Eu_0Acceleration.csv',
+                      'Activity-Data/3112/Esc_up/2/Eu_2Acceleration.csv',
+                      'Activity-Data/3112/Esc_up/3/Eu_5Acceleration.csv',
+                      'Activity-Data/3112/Esc_up/4/Eu_6Acceleration.csv',
+                      'Activity-Data/3412/Esc_up/1/Eu_0Acceleration.csv',
+                      'Activity-Data/3412/Esc_up/2/Eu_1Acceleration.csv',
+                      'Activity-Data/3412/Esc_up/3/Eu_2Acceleration.csv',
+                      'Activity-Data/3412/Esc_up/4/Eu_3Acceleration.csv',
+                      'Activity-Data/3412/Esc_up/5/Eu_4Acceleration.csv',
+                      'Activity-Data/3412/Esc_up/6/Eu_5Acceleration.csv']
+                      
+escalator_down_files_acc = ['Activity-Data/Samsung/061217/Esc_down/Esc_down_1/Esc_down_1Acceleration.csv',
+                        'Activity-Data/Samsung/061217/Esc_down/Esc_down_2/Esc_down_2Acceleration.csv',
+                        'Activity-Data/Samsung/061217/Esc_down/3/Esc_d2Acceleration.csv',
+                        'Activity-Data/2812/Escalator_down/1/Ed_1Acceleration.csv', 
+                        'Activity-Data/2812/Escalator_down/2/Ed_2Acceleration.csv',
+                        'Activity-Data/2812/Escalator_down/3/Ed_7Acceleration.csv',
+                        'Activity-Data/2912/Escalator_down/1/Ed_1Acceleration.csv',
+                        'Activity-Data/2912/Escalator_down/2/Ed_2Acceleration.csv',
+                        'Activity-Data/2912/Escalator_down/3/Ed_3Acceleration.csv',
+                        'Activity-Data/2912/Escalator_down/4/Ed_5Acceleration.csv',
+                        'Activity-Data/2912/Escalator_down/5/Ed_8Acceleration.csv',
+                        'Activity-Data/2912/Escalator_down/6/Ed_9Acceleration.csv',
+                        'Activity-Data/3012/Escalator_down/1/Ed_0Acceleration.csv',
+                        'Activity-Data/3112/Esc_down/1/Ed_0Acceleration.csv',
+                        'Activity-Data/3112/Esc_down/2/Ed_1Acceleration.csv',
+                        'Activity-Data/3112/Esc_down/3/Ed_5Acceleration.csv',
+                        'Activity-Data/3212/Esc_down/1/Ed_3Acceleration.csv',
+                        'Activity-Data/3212/Esc_down/2/Ed_4Acceleration.csv',
+                        'Activity-Data/3212/Esc_down/3/Ed_8Acceleration.csv',
+                        'Activity-Data/3212/Esc_down/4/Ed_13Acceleration.csv',
+                        'Activity-Data/3212/Esc_down/5/Ed_15Acceleration.csv',
+                        'Activity-Data/3212/Esc_down/6/Ed_18Acceleration.csv',
+                        'Activity-Data/3312/Esc_down/1/Ed_0Acceleration.csv',
+                        'Activity-Data/3312/Esc_down/2/Ed_3Acceleration.csv',
+                        'Activity-Data/3312/Esc_down/3/Ed_5Acceleration.csv',
+                        'Activity-Data/3312/Esc_down/4/Ed_7Acceleration.csv',
+                        'Activity-Data/3412/Esc_down/1/Ed_0Acceleration.csv',
+                        'Activity-Data/3412/Esc_down/10/Ed_9Acceleration.csv',
+                        'Activity-Data/3412/Esc_down/2/Ed_1Acceleration.csv',
+                        'Activity-Data/3412/Esc_down/3/Ed_2Acceleration.csv',
+                        'Activity-Data/3412/Esc_down/4/Ed_3Acceleration.csv',
+                        'Activity-Data/3412/Esc_down/5/Ed_4Acceleration.csv',
+                        'Activity-Data/3412/Esc_down/6/Ed_5Acceleration.csv',
+                        'Activity-Data/3412/Esc_down/7/Ed_6Acceleration.csv',
+                        'Activity-Data/3412/Esc_down/8/Ed_7Acceleration.csv',
+                        'Activity-Data/3412/Esc_down/9/Ed_8Acceleration.csv',
+                        'Activity-Data/3512/Esc_down/1/Ed_0Acceleration.csv',
+                        'Activity-Data/3512/Esc_down/2/Ed_1Acceleration.csv']
+                        
+def print_acc_characteristics(su_frame, sd_frame, eu_frame, ed_frame):
+    print("Stairs Up Frame")
+    display(su_frame.head(), su_frame.tail())
+    print("Stairs Down Frame")
+    display(sd_frame.head(), sd_frame.tail())
+    print("Escalator Up Frame")
+    display(eu_frame.head(), eu_frame.tail())
+    print("Escalator Down Frame")
+    display(ed_frame.head(), ed_frame.tail())
+    
+def create_acc_features_windows(windows_frames, percentile=50):
+    windows_features_list = []
+    for window in windows_frames:
+        if len(window) <= 1:
+            continue
+        else:
+            ## X Components
+            skew_windows_x = skew(window['accelerationX'])
+
+            window_norm_x = normalize(np.array(window['accelerationX']).reshape(1,-1))
+            percentile_x = np.percentile(window_norm_x, percentile)
+
+            q75_x, q25_x = np.percentile(window['accelerationX'], [75 ,25])
+            iqr_x = q75_x - q25_x
+
+            kurtosis_x = kurtosis(window['accelerationX'])
+
+            std_deviation_x = np.std(window['accelerationX'])
+
+            #derivative = compute_sum_derivative_window(window['pressure'], window['timestamp'])
+            derivative_window_x = np.gradient(window['accelerationX'], window['timestamp'])
+            derivative_x = sum(derivative_window_x)
+            
+            median_x = np.median(window['accelerationX'].values)
+            window['acc_norm_x'] = window['accelerationX'].apply(lambda x: x-median_x)    
+            norm_x = sum(window['acc_norm_x'])
+#             print(skew_windows, percentile, iqr, kurtosis_w, std_deviation, derivative)
+            window_features = pd.DataFrame()
+            window_features['skewX'] = [skew_windows_x]
+            window_features['percentileX'] = [percentile_x]
+            window_features['iqrX'] = [iqr_x]
+            window_features['kurtosisX'] = [kurtosis_x]
+            window_features['std_deviationX'] = [std_deviation_x]
+            window_features['derivativeX'] = [derivative_x]
+#             print(window_features)
+            window_features['normX'] = [norm_x]
+    
+            ## Y Components
+            skew_windows_y = skew(window['accelerationY'])
+
+            window_norm_y = normalize(np.array(window['accelerationY']).reshape(1,-1))
+            percentile_y = np.percentile(window_norm_y, percentile)
+
+            q75_y, q25_y = np.percentile(window['accelerationY'], [75 ,25])
+            iqr_y = q75_y - q25_y
+
+            kurtosis_y = kurtosis(window['accelerationY'])
+
+            std_deviation_y = np.std(window['accelerationY'])
+
+            #derivative = compute_sum_derivative_window(window['pressure'], window['timestamp'])
+            derivative_window_y = np.gradient(window['accelerationY'], window['timestamp'])
+            derivative_y = sum(derivative_window_y)
+            
+            median_y = np.median(window['accelerationY'].values)
+            window['acc_norm_y'] = window['accelerationY'].apply(lambda x: x-median_y)    
+            norm_y = sum(window['acc_norm_y'])
+#             print(skew_windows, percentile, iqr, kurtosis_w, std_deviation, derivative)
+#             window_features = pd.DataFrame()
+            window_features['skewY'] = [skew_windows_y]
+            window_features['percentileY'] = [percentile_y]
+            window_features['iqrY'] = [iqr_y]
+            window_features['kurtosisY'] = [kurtosis_y]
+            window_features['std_deviationY'] = [std_deviation_y]
+            window_features['derivativeY'] = [derivative_y]
+
+            window_features['normY'] = [norm_y]
+            
+            ## Z Components
+            skew_windows_z = skew(window['accelerationZ'])
+
+            window_norm_z = normalize(np.array(window['accelerationZ']).reshape(1,-1))
+            percentile_z = np.percentile(window_norm_z, percentile)
+
+            q75_z, q25_z = np.percentile(window['accelerationZ'], [75 ,25])
+            iqr_z = q75_z - q25_z
+
+            kurtosis_z = kurtosis(window['accelerationZ'])
+
+            std_deviation_z = np.std(window['accelerationZ'])
+
+            #derivative = compute_sum_derivative_window(window['pressure'], window['timestamp'])
+            derivative_window_z = np.gradient(window['accelerationZ'], window['timestamp'])
+            derivative_z = sum(derivative_window_z)
+            
+            median_z = np.median(window['accelerationZ'].values)
+            window['acc_norm_z'] = window['accelerationZ'].apply(lambda x: x-median_z)    
+            norm_z = sum(window['acc_norm_z'])
+#             print(skew_windows, percentile, iqr, kurtosis_w, std_deviation, derivative)
+#             window_features = pd.DataFrame()
+            window_features['skewZ'] = [skew_windows_z]
+            window_features['percentileZ'] = [percentile_z]
+            window_features['iqrZ'] = [iqr_z]
+            window_features['kurtosisZ'] = [kurtosis_z]
+            window_features['std_deviationZ'] = [std_deviation_z]
+            window_features['derivativeZ'] = [derivative_z]
+#             print(window_features)
+            window_features['normZ'] = [norm_z]    
+    
+
+#             print(window_features)
+            windows_features_list.append(window_features)
+#     print(len(windows_features_list))
+    df_features = pd.concat(windows_features_list)
+    return df_features
+    
+def create_acc_data_frame(input_files, sliding_window_interval, window_length, header=0, usecols=[0,1,2,3,5]):
+    frame_list = []
+    for i_file in input_files:
+        df = pd.read_csv(i_file, delimiter=',', header = header, skipinitialspace = True, usecols = usecols)
+        df_windows = create_sliding_windows(df, sliding_window_interval, window_length)
+        df_features = create_acc_features_windows(df_windows)
+#     print(len(df), len(df_features))
+        frame_list.append(df_features)
+    out_frame = pd.DataFrame()
+    out_frame = pd.concat(frame_list)
+    out_frame = out_frame.reset_index(drop=True)
+    return out_frame
+    
+def create_acc_features_from_files(sliding_window_interval, window_interval, 
+                               su_files = climbing_files_acc, sd_files = downstairs_files_acc,
+                               eu_files = escalator_up_files_acc, ed_files = escalator_down_files_acc):
+    su_frame = create_acc_data_frame(su_files, sliding_window_interval, window_interval)
+    su_frame['label'] = 1
+    sd_frame = create_acc_data_frame(sd_files, sliding_window_interval, window_interval)
+    sd_frame['label'] = 2
+    eu_frame = create_acc_data_frame(eu_files, sliding_window_interval, window_interval)
+    eu_frame['label'] = 3
+    ed_frame = create_acc_data_frame(ed_files, sliding_window_interval, window_interval)
+    ed_frame['label'] = 4
+    return su_frame, sd_frame, eu_frame, ed_frame
+    
+def create_dataset_esc_stairs(su_frame, sd_frame, eu_frame, ed_frame):
+    s_frame = pd.concat([su_frame, sd_frame])
+    s_frame['label_es'] = 0
+    e_frame = pd.concat([eu_frame, ed_frame])
+    e_frame['label_es'] = 1
+    return s_frame, e_frame
+    
+def visualize_esc_stairs_features(s_frame, e_frame, param):
+    s_features_array = s_frame.as_matrix(columns=s_frame.columns)
+    e_features_array = e_frame.as_matrix(columns=e_frame.columns)
+    X = np.concatenate([s_features_array, e_features_array])
+    print(X.shape)
+    if param == 'x':
+        windows_map = { 0:{'values':X[:,0], 'legend': 'skewness'}, 1:{'values':X[:,5], 'legend': 'gradient'},
+               2:{'values':X[:,3], 'legend':'kurtosis'}, 3:{'values':X[:,4], 'legend':'std deviation'},
+               4:{'values':X[:,1], 'legend':'percentile_windows'}, 5:{'values':X[:,2], 'legend': 'iqr'},
+               6:{'values':X[:,6], 'legend':'norm'}, 7:{'values':X[:,22], 'legend':'labels'}}
+#     print(len(combos))
+    elif param == 'y':
+        windows_map = { 0:{'values':X[:,7], 'legend': 'skewness'}, 1:{'values':X[:,12], 'legend': 'gradient'},
+               2:{'values':X[:,10], 'legend':'kurtosis'}, 3:{'values':X[:,11], 'legend':'std deviation'},
+               4:{'values':X[:,8], 'legend':'percentile_windows'}, 5:{'values':X[:,9], 'legend': 'iqr'},
+               6:{'values':X[:,13], 'legend':'norm'}, 7:{'values':X[:,22], 'legend':'labels'}}
+    elif param == 'z':
+        windows_map = { 0:{'values':X[:,14], 'legend': 'skewness'}, 1:{'values':X[:,19], 'legend': 'gradient'},
+               2:{'values':X[:,17], 'legend':'kurtosis'}, 3:{'values':X[:,18], 'legend':'std deviation'},
+               4:{'values':X[:,15], 'legend':'percentile_windows'}, 5:{'values':X[:,16], 'legend': 'iqr'},
+               6:{'values':X[:,20], 'legend':'norm'}, 7:{'values':X[:,22], 'legend':'labels'}}
+    combos = list(combinations(list(range(len(windows_map.keys())-1)), 2))
+    for combo in combos:
+        fig = plt.figure()
+        ax1 = fig.add_subplot(111)
+        ax1.scatter(windows_map[combo[0]]['values'][:len(s_frame)], windows_map[combo[1]]['values'][:len(s_frame)], c='r', alpha=0.5, label='stairs')
+        ax1.scatter(windows_map[combo[0]]['values'][len(s_frame):], windows_map[combo[1]]['values'][len(s_frame):], c='b', alpha=0.5, label='escalator')
+        ax = plt.subplot()
+        ax.set_xlabel(windows_map[combo[0]]['legend'])
+        ax.set_ylabel(windows_map[combo[1]]['legend'])
+        ax.legend()
+        ax.grid(True)
+        plt.show()
