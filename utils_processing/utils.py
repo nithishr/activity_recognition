@@ -494,6 +494,8 @@ def create_pressure_features_windows(windows_frames, percentile=50):
             window_features['derivative'] = [derivative]
 #             print(window_features)
             window_features['norm'] = [norm]
+            window_features['ts_max'] = max(window['timestamp'])
+            window_features['ts_min'] = min(window['timestamp'])
             windows_features_list.append(window_features)
 #     print(len(windows_features_list))
     df_features = pd.concat(windows_features_list)
@@ -1067,7 +1069,97 @@ escalator_down_files_acc = ['Activity-Data/Samsung/061217/Esc_down/Esc_down_1/Es
                         'Activity-Data/3512/Esc_down/1/Ed_0Acceleration.csv',
                         'Activity-Data/3512/Esc_down/2/Ed_1Acceleration.csv']
                         
-def print_acc_characteristics(su_frame, sd_frame, eu_frame, ed_frame):
+lift_up_files_acc = ['Activity-Data/1912/Lift_Up/1/Lift_up_1Acceleration.csv', 
+                 'Activity-Data/1912/Lift_Up/2/Lift_up_4Acceleration.csv',
+                 'Activity-Data/1912/Lift_Up/3/Lift_up_9Acceleration.csv', 
+                 'Activity-Data/Samsung/061217/Lift_Up/1/Lift_Up_2Acceleration.csv',
+                 'Activity-Data/Samsung/061217/Lift_Up/2/Lift_up_5Acceleration.csv',
+                 'Activity-Data/2812/Lift_up/1/Lu_1Acceleration.csv',
+                 'Activity-Data/2812/Lift_up/2/Lu_6Acceleration.csv',
+                 'Activity-Data/2812/Lift_up/3/Lu_10Acceleration.csv',
+                 'Activity-Data/2912/Lift_up/1/Lu_1Acceleration.csv',
+                 'Activity-Data/2912/Lift_up/2/Lu_2Acceleration.csv',
+                 'Activity-Data/2912/Lift_up/3/Lu_3Acceleration.csv',
+                 'Activity-Data/2912/Lift_up/4/Lu_5Acceleration.csv',
+                 'Activity-Data/3112/Lift_up/1/Lu_0Acceleration.csv',
+                 'Activity-Data/3112/Lift_up/2/Lu_1Acceleration.csv',
+                 'Activity-Data/3112/Lift_up/3/Lu_0Acceleration.csv',
+                 'Activity-Data/3112/Lift_up/4/Lu_1Acceleration.csv',
+                 'Activity-Data/3112/Lift_up/5/Lu_3Acceleration.csv',
+                 'Activity-Data/3112/Lift_up/6/Lu_7Acceleration.csv',
+                 'Activity-Data/3212/Lift_up/1/Lu_0Acceleration.csv',
+                 'Activity-Data/3212/Lift_up/2/Lu_1Acceleration.csv',
+                 'Activity-Data/3212/Lift_up/3/Lu_5Acceleration.csv',
+                 'Activity-Data/3212/Lift_up/4/Lu_7Acceleration.csv',
+                 'Activity-Data/3212/Lift_up/5/Lu_10Acceleration.csv',
+                 'Activity-Data/3312/Lift_up/1/Lu_0Acceleration.csv',
+                 'Activity-Data/3312/Lift_up/2/Lu_11Acceleration.csv',
+                 'Activity-Data/3412/Lift_up/1/Lu_0Acceleration.csv',
+                 'Activity-Data/3412/Lift_up/2/Lu-1Acceleration.csv',
+                 'Activity-Data/3512/Lift_up/1/Lu_0Acceleration.csv',
+                 'Activity-Data/3512/Lift_up/2/Lu_1Acceleration.csv',
+                 'Activity-Data/3512/Lift_up/3/Lu_3Acceleration.csv',
+                 'Activity-Data/3512/Lift_up/4/Lu_4Acceleration.csv']
+
+lift_down_files_acc = ['Activity-Data/1912/Lift_Down/1/Lift_down_9Acceleration.csv',
+                   'Activity-Data/Samsung/061217/Lift_Down/1/Lift_Down_2Acceleration.csv',
+                   'Activity-Data/Samsung/061217/Lift_Down/2/Lift_down_3Acceleration.csv',
+                   'Activity-Data/Samsung/061217/Lift_Down/3/Lift_down_Acceleration.csv',
+                   'Activity-Data/2812/Lift_down/1/Ld_1Acceleration.csv',
+                   'Activity-Data/2812/Lift_down/2/Ld_4Acceleration.csv',
+                   'Activity-Data/2812/Lift_down/3/Ld_8Acceleration.csv',
+                   'Activity-Data/2912/Lift_down/1/Ld_1Acceleration.csv',
+                   'Activity-Data/2912/Lift_down/2/Ld_3Acceleration.csv',
+                   'Activity-Data/2912/Lift_down/3/Ld_7Acceleration.csv',
+                   'Activity-Data/2912/Lift_down/4/Ld_8Acceleration.csv',
+                   'Activity-Data/3012/Lift_down/1/Ld_0Acceleration.csv',
+                   'Activity-Data/3112/Lift_down/1/Ld_0Acceleration.csv',
+                   'Activity-Data/3112/Lift_down/2/Ld_1Acceleration.csv',
+                   'Activity-Data/3112/Lift_down/3/Ld_3Acceleration.csv',
+                   'Activity-Data/3212/Lift_down/1/Ld_0Acceleration.csv',
+                   'Activity-Data/3212/Lift_down/2/Ld_1Acceleration.csv',
+                   'Activity-Data/3312/Lift_down/1/Ld_0Acceleration.csv',
+                   'Activity-Data/3312/Lift_down/2/Ld_2Acceleration.csv',
+                   'Activity-Data/3412/Lift_down/1/Ld_0Acceleration.csv',
+                   'Activity-Data/3412/Lift_down/2/Ld_1Acceleration.csv',
+                   'Activity-Data/3412/Lift_down/3/Ld_3Acceleration.csv',
+                   'Activity-Data/3412/Lift_down/4/Ld_4Acceleration.csv',
+                   'Activity-Data/3412/Lift_down/5/Ld-2Acceleration.csv',
+                   'Activity-Data/3512/Lift_down/1/Ld_0Acceleration.csv',
+                   'Activity-Data/3512/Lift_down/2/Ld_1Acceleration.csv',
+                   'Activity-Data/3512/Lift_down/3/Ld_2Acceleration.csv',
+                   'Activity-Data/3512/Lift_down/4/Ld_3Acceleration.csv',
+                   'Activity-Data/3512/Lift_down/5/Ld_4Acceleration.csv',
+                   'Activity-Data/3512/Lift_down/6/Ld_5Acceleration.csv',
+                   'Activity-Data/3512/Lift_down/7/Ld_6Acceleration.csv',
+                   'Activity-Data/3512/Lift_down/8/Ld_7Acceleration.csv']
+                   
+walking_files_acc = ['Activity-Data/Samsung/Walk/Walk_N2/Walk_N2Acceleration.csv', 
+                 'Activity-Data/Samsung/Walk/Walk_N_3/Walk_N_3Acceleration.csv', 
+                 'Activity-Data/Samsung/Walk/Walk_N/Walk_NAcceleration.csv',
+                 'Activity-Data/Samsung/Walk/Walk_P1/Walk_P1Acceleration.csv',
+                 'Activity-Data/Samsung/Walk/Walk_P2/Walk_P2Acceleration.csv',
+                 'Activity-Data/Walking/01/Walking01Acceleration.csv', 
+                 'Activity-Data/Walking/2/Walking2Acceleration.csv',
+                 'Activity-Data/Walking/3/Walking3Acceleration.csv',
+                 'Activity-Data/Walking/04/Walking04Acceleration.csv',
+                 'Activity-Data/Walking/5/Walking5Acceleration.csv',
+                 'Activity-Data/1912/Walk/1/Walk_1Acceleration.csv',
+                 'Activity-Data/1912/Walk/2/Walk_8Acceleration.csv',
+                 'Activity-Data/2012/Walk/1/Walk_1Acceleration.csv', 
+                 'Activity-Data/2012/Walk/2/Walk_2Acceleration.csv',
+                 'Activity-Data/2012/Walk/3/Walk_3Acceleration.csv',
+                 'Activity-Data/2012/Walk/4/Walk_4Acceleration.csv',
+                 'Activity-Data/2012/Walk/5/Walk_5Acceleration.csv', 
+                 'Activity-Data/2012/Walk/6/Walk_6Acceleration.csv',
+                 'Activity-Data/2012/Walk/7/Walk7Acceleration.csv',
+                 'Activity-Data/2012/Walk/8/Walk_8Acceleration.csv',
+                 'Activity-Data/2812/Walking/1/W_1Acceleration.csv',
+                 'Activity-Data/2812/Walking/2/W_3Acceleration.csv',
+                 'Activity-Data/2812/Walking/3/W_4Acceleration.csv',
+                 'Activity-Data/3012/Walk/1/W_0Acceleration.csv']
+                        
+def print_acc_characteristics(su_frame, sd_frame, eu_frame, ed_frame, lu_frame, ld_frame, w_frame):
     print("Stairs Up Frame")
     display(su_frame.head(), su_frame.tail())
     print("Stairs Down Frame")
@@ -1076,6 +1168,12 @@ def print_acc_characteristics(su_frame, sd_frame, eu_frame, ed_frame):
     display(eu_frame.head(), eu_frame.tail())
     print("Escalator Down Frame")
     display(ed_frame.head(), ed_frame.tail())
+    print("Elevator Up Frame")
+    display(lu_frame.head(), lu_frame.tail())
+    print("Elevator Down Frame")
+    display(ld_frame.head(), ld_frame.tail())
+    print("Walking Frame")
+    display(w_frame.head(), w_frame.tail())
     
 def create_acc_features_windows(windows_frames, percentile=50):
     windows_features_list = []
@@ -1175,7 +1273,8 @@ def create_acc_features_windows(windows_frames, percentile=50):
             window_features['derivativeZ'] = [derivative_z]
 #             print(window_features)
             window_features['normZ'] = [norm_z]    
-    
+            window_features['ts_max'] = max(window['timestamp'])
+            window_features['ts_min'] = min(window['timestamp'])
 
 #             print(window_features)
             windows_features_list.append(window_features)
@@ -1198,7 +1297,8 @@ def create_acc_data_frame(input_files, sliding_window_interval, window_length, h
     
 def create_acc_features_from_files(sliding_window_interval, window_interval, 
                                su_files = climbing_files_acc, sd_files = downstairs_files_acc,
-                               eu_files = escalator_up_files_acc, ed_files = escalator_down_files_acc):
+                               eu_files = escalator_up_files_acc, ed_files = escalator_down_files_acc,
+                               lu_files = lift_up_files_acc, ld_files = lift_down_files_acc, w_files = walking_files_acc):
     su_frame = create_acc_data_frame(su_files, sliding_window_interval, window_interval)
     su_frame['label'] = 1
     sd_frame = create_acc_data_frame(sd_files, sliding_window_interval, window_interval)
@@ -1207,7 +1307,13 @@ def create_acc_features_from_files(sliding_window_interval, window_interval,
     eu_frame['label'] = 3
     ed_frame = create_acc_data_frame(ed_files, sliding_window_interval, window_interval)
     ed_frame['label'] = 4
-    return su_frame, sd_frame, eu_frame, ed_frame
+    lu_frame = create_acc_data_frame(lu_files, sliding_window_interval, window_interval)
+    lu_frame['label'] = 5
+    ld_frame = create_acc_data_frame(ld_files, sliding_window_interval, window_interval)
+    ld_frame['label'] = 6
+    w_frame = create_acc_data_frame(w_files, sliding_window_interval, window_interval)
+    w_frame['label'] = 0
+    return su_frame, sd_frame, eu_frame, ed_frame, lu_frame, ld_frame, w_frame
     
 def create_dataset_esc_stairs(su_frame, sd_frame, eu_frame, ed_frame):
     s_frame = pd.concat([su_frame, sd_frame])
