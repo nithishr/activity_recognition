@@ -519,7 +519,7 @@ def create_features_from_files(sliding_window_interval, window_interval, w_files
                                su_files = climbing_files, sd_files = downstairs_files,
                                eu_files = escalator_up_files, ed_files = escalator_down_files,
                                lu_files = lift_up_files, ld_files = lift_down_files):
-    w_frame = create_data_frame(walking_files, sliding_window_interval, window_interval)
+    w_frame = create_data_frame(w_files, sliding_window_interval, window_interval)
     w_frame['label'] = 0
     su_frame = create_data_frame(su_files, sliding_window_interval, window_interval)
     su_frame['label'] = 1
